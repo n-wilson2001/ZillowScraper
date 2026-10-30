@@ -12,29 +12,41 @@ var regionalMaxFoot = 0.0;
 var regionalMaxZillowPrice = 0.0;
 var regionalMaxZillowRent = 0.0;
 
+/* Display names for cities whose JSON key has no space */
+const cityNames = {
+  WashingtonDC: "Washington DC",
+  LosAngeles: "Los Angeles",
+  SanFrancisco: "San Francisco",
+  SanDiego: "San Diego"
+};
+
 var cityList;
- fetch('/fetchData', {
-  method: 'POST',
-  body: locationName
-})
+ fetch('dataStorage.json')
 .then(function(response) {
-  // Handle response from Go server
+  // Read the data snapshot, so the site works without the Go server
   if (response.ok) {
-    console.log(response.body)
     return response.clone().json();
   } else {
     // Handle error response
     console.error('Error:', response.status);
   }
 })
-.then(data => {
-  console.log(data.cityDataList[0].location)
+.then(allData => {
+  // Same shape the Go /fetchData route returns: the latest entry for each city in the region
+  const data = {
+    cityDataList: Object.entries(allData[locationName]).map(([city, cityData]) => ({
+      location: cityNames[city] || city,
+      data: cityData.data[cityData.data.length - 1]
+    }))
+  };
   cityList = data.cityDataList
   switch(locationName){
     case "NorthEast":
         locationName = "North East";
+        break;
     case "WestCoast":
         locationName = "West Coast";
+        break;
   }
 
   document.getElementById("body").innerHTML += 
@@ -66,7 +78,7 @@ var cityList;
       <div class="flex-none w-1/3 relative" id="image"><img src="images/`+element.location+`.jpg" alt="`+element.location+`" class="absolute inset-0 w-full h-full object-cover rounded-l-lg" loading="lazy" /></div>
           <form class="flex-auto p-6  bg-white" name="dataValues`+count+`">
                 <div class="flex flex-wrap">
-                  <h1 class="flex-auto font-medium text-2xl text-slate-900" id="Count">`+ element.data.runningTotalEntries + ` Houses Anaylized!</h1>
+                  <h1 class="flex-auto font-medium text-2xl text-slate-900" id="Count">`+ element.data.runningTotalEntries + ` Houses Analyzed!</h1>
                   <div class="w-full flex-none mt-2 order-1 text-3xl font-bold text-cyan-600" id="Title">Typical House in `+element.location+`</div>
                 </div>
                 <div class="flex items-baseline mt-4 mb-6 pb-6 border-b border-slate-200">
@@ -319,5 +331,5 @@ function changeOutput(value, count){
 
 function returnHome() {
     // Return to home page
-    window.location.href = '/';
+    window.location.href = 'index.html';
 };

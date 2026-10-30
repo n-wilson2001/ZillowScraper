@@ -13,7 +13,7 @@
         Please Select a Location
       </h1>
       <br>
-      <form class="w-max items-center" method="GET" action=""> 
+      <form class="w-max items-center" onsubmit="return false">
         <div class="flex space-x-4 w-full h-auto items-stretch">
           <button class="grow rounded bg-cyan-400 h-16 w-48 text-white px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal  shadow-[0_4px_9px_-4px_#0891b2] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_#0891b2,0_4px_18px_0_#0891b2] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_#0891b2,0_4px_18px_0_#0891b2] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_#0891b2,0_4px_18px_0_#0891b2] dark:shadow-[0_4px_9px_-4px_#0891b2] dark:hover:shadow-[0_8px_9px_-4px_#0891b2,0_4px_18px_0_#0891b2] dark:focus:shadow-[0_8px_9px_-4px_#0891b2,0_4px_18px_0_#0891b2] dark:active:shadow-[0_8px_9px_-4px_#0891b2,0_4px_18px_0_#0891b2] transform hover:scale-105" id="NorthEast"  onclick="requestData('NorthEast')">
             North East
@@ -26,25 +26,13 @@
           </button>
         </div>
       </form>
+      <p class="mt-6 text-center text-sm text-neutral-500">Demo using a saved snapshot of June 2023 averages. Not affiliated with Zillow.</p>
     </div>
   </div>
   <script>
    function requestData(locationName) {
-        // Send an HTTP GET request to the Go backend if needed
-        fetch("/hello").then(response => {
-          if (response.ok) {
-            // Redirect to the desired page once the Go function completes
-            window.location.href = '/city.html?location='+locationName;
-          } else {
-            console.error('Failed to redirect to cty.html');
-          }
-        })
-        .catch(error => {
-          console.error('Failed to fetch Go function:', error);
-        });
-
         // Redirect to the appropriate location page
-        window.location.href = "/newpage";
+        window.location.href = 'city.html?location='+locationName;
     };
   </script>
 </body>
